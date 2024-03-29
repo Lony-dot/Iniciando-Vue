@@ -11,9 +11,17 @@
         <div class="row">
             <h3>Campeonato Brasileiro - Série A - 2018</h3>
         </div>
-        <div>
+        <div class="">
+            <div class="col col-md-12"><button class="btn btn-primary" @click="criarNovoJogo">NOVO JOGO</button></div>
             
         </div>
+        <div>
+        </div>
+        <input type="text" class="form-control col-md-1" v-model="novoJogo.casa.gols">
+                {{novoJogo.casa.time ? novoJogo.casa.time.nome: ''}}
+        <input type="text" class="form-control" v-model="novoJogo.fora.gols">
+                {{novoJogo.fora.time ? novoJogo.fora.time.nome: ''}}
+        <button class="btn btn-primary" @click="showAlert">FIM DE JOGO</button>
         <table class="table table-striped">
             <thead>
               <tr>
@@ -26,19 +34,19 @@
             </thead>
             <tbody>
               <tr v-for="time in times">
-                <th scope="row"></th>
-                <td>
+                <td class="d-flex align-items-center">
                     <img :src="time.escudo" alt="">
                     {{time.nome}}
                 </td>
+                <td>{{time.nome}}</td>
                 <td>{{time.pontos}}</td>
                 <td>{{time.gm}}</td>
                 <td>{{time.gs}}</td>
+                  
               </tr>
             </tbody>
           </table>
-        <input type="text" :id="gols+'id' " v-model="gols">
-        <button class="btn btn-primary" @click="showAlert">FIM DE JOGO</button>
+        
 </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 </body>
@@ -58,7 +66,7 @@
     new Vue({
         el: "#app",
         data: {
-            gols: '2',
+            gols: '3',
             times: [
             new Time('palmeiras', 'assets/palmeiras_60x60.png'),
                 new Time('Internacional', 'assets/internacional_60x60.png'),
@@ -81,13 +89,33 @@
                 new Time('América-MG', 'assets/america_mg_60x60.png'),
                 new Time('Paraná', 'assets/parana_60x60.png'),
             ],
+            novoJogo: {
+                casa: {
+                    time: null,
+                    gols: 0
+                },
+                fora: {
+                    time: null,
+                    gols: 0
+                }
+            }
         },
         methods: {
             showAlert(){
                 alert('Fim de jogo')
             },
-            pegarValor(){
+            pegarValor($event){
             console.log($event)
+            },
+            criarNovoJogo() {
+                var indiceCasa = Math.floor(Math.random() * 20),
+                    indiceFora = Math.floor(Math.random() * 20)
+
+                    this.novoJogo.casa.time = this.times[indiceCasa];
+                    this.novoJogo.casa.gols = 0;
+                    this.novoJogo.fora.time = this.times[indiceFora];
+                    this.novoJogo.fora.gols = 0;
+                    console.log(this.novoJogo);
             }
         }
     })
